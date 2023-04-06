@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import Repositories from './src/telas/Repositories';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Repositories />
+      {/* <Text>Esse é o meu primeiro app</Text> */}
       <StatusBar style="auto" />
     </View>
   );
@@ -14,7 +16,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    // backgroundColor: 'blue',
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: '15%',
+    justifyContent: 'flex-start',
   },
 });

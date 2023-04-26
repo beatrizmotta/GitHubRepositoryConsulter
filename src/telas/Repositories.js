@@ -1,39 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { Text, TextInput, StyleSheet, Button } from "react-native";
+import { Text, TextInput, StyleSheet, Button, View } from "react-native";
 
-const Repositories = () => {
+const Repositories = ({navigation}) => {
 
-    const [repositories, setRepositories] = useState([]);
+    // useEffect(() => {
+    //     const request_url = `https://api.github.com/users/beatrizmotta/repos`;
+    //     axios.get(request_url).then((response) => {
+    //         console.log(response.data);
+    //       });
+
+    // }, [])
+
+
     const [username, setUserName] = useState('')
     
-    const searchRepositories = () => {
 
-        const request_url = `https://api.github.com/users/${username}/repos`;
-
-        axios.get(request_url)
-        .then((res) => {
-            let newRepositories = [...repositories];
-            res.forEach(repo => {
-                newRepositories.push({
-                    "name": repo.name,
-                    "date_of_creation": repo.created_at,
-                    "last_update": repo.updated_at
-                })
-            });
-            setRepositories(...newRepositories)
-            
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-          })
-        
-
-    }
 
     return (
-        <>
+        <View style={styles.container}>
         
         <Text style={styles.pageTitle}>
             Github Repository Consulter
@@ -44,22 +29,13 @@ const Repositories = () => {
         placeholder="Insira o username do Github">
         </TextInput>
 
-        {
-            repositories.map((repo) => {
-                <>
-                    <Text>{repo.name}</Text>
-                    <Text>{repo.date_of_creation}</Text>
-                    <Text>{repo.last_update}</Text>
-                </>
-            })
-        }
-
         <Button
-            onPress={() => searchRepositories()}
+            onPress={() => navigation.navigate("ShowRepositories", {username: username})}
+            // onPress={() => searchRepositories()}
             title="Pesquisar"
             accessibilityLabel="Learn more about this purple button"  
         />
-        </>
+        </View>
     )
 
 }
@@ -77,7 +53,16 @@ const styles = StyleSheet.create({
         width: '60%',
         marginTop: '60%',
         textAlign: 'center'
-    }
+    }, 
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        // backgroundColor: "red",
+        // backgroundColor: 'blue',
+        alignItems: 'center',
+        // marginTop: '15%',
+        justifyContent: 'flex-start',
+      }
 })
 
 export default Repositories;

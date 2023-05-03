@@ -1,17 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-const Stack = createNativeStackNavigator();
+import { useFonts } from "expo-font"
 import Repositories from './src/telas/Repositories';
 import ShowRepositories from './src/telas/ShowRepositories';
+import Home from './src/telas/Home';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  const [loaded] = useFonts({
+    KonkhmerSleokchher: require('./assets/fonts/KonkhmerSleokchher-Regular.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen component={Repositories} name='Repositories' />
-        <Stack.Screen component={ShowRepositories} name='ShowRepositories' />
+        <Stack.Screen component={Home} name="Home" options={{
+          headerShown: false
+        }} />
+        <Stack.Screen component={Repositories} name="Buscar" />
+        <Stack.Screen component={ShowRepositories} name='Meus Repositórios' />
       </Stack.Navigator>
     </NavigationContainer>
   );

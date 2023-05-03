@@ -8,6 +8,13 @@ const ShowRepositories = ({navigation, route}) => {
         searchRepositories();
     }, [])
 
+    interface IRepoInfo {
+        id: Number,
+        name: String,
+        created_at: String,
+        updated_at: String 
+    }
+
     const [repositories, setRepositories] = useState([]);
     const searchRepositories = async () => {
 
@@ -17,13 +24,13 @@ const ShowRepositories = ({navigation, route}) => {
             const data = Array.from(response.data);
             const arr = [];
 
-            data.forEach((repo) => {
+            data.forEach((repo: IRepoInfo) => {
                 arr.push({
-                        "id": repo.id,
-                        "name": repo.name, 
-                        "date_of_creation": repo.created_at,
-                        "last_update": repo.updated_at
-                });
+                    "id": repo.id,
+                    "name": repo.name, 
+                    "date_of_creation": repo.created_at,
+                    "last_update": repo.updated_at
+            });
             })
 
             setRepositories(oldArray => [...oldArray, ...arr])

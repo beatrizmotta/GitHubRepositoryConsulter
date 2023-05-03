@@ -1,66 +1,120 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-import { Text, TextInput, StyleSheet, Button, View } from "react-native";
+import axios, { AxiosResponse } from 'axios';
+import { Text, TextInput, StyleSheet, TouchableOpacity, View } from "react-native";
+import ShowRepositories from "./ShowRepositories";
 
 const Repositories = ({navigation}) => {
 
-    // useEffect(() => {
-    //     const request_url = `https://api.github.com/users/beatrizmotta/repos`;
-    //     axios.get(request_url).then((response) => {
-    //         console.log(response.data);
-    //       });
 
-    // }, [])
+    const [username, setUserName] = useState<String>('')
+    const [errorMessage, setErrorMessage] = useState<String>(""); 
+
+    const onPress = ():void => {
+        if (username === "") {
+            setErrorMessage("Insira algum nome de usuário!");
+            return;
+        } 
+
+        const request_url = `https://api.github.com/users/${username}/repos`;
+        axios.get(request_url)
+            .then(() => {
+            
+                navigation.navigate("Meus Repositórios", {username: username});
+            
+            })
+            .catch(() => {
+                
+                setErrorMessage("Usuário não encontrado.")
+
+            });
+    }
 
 
-    const [username, setUserName] = useState('')
-    
 
 
     return (
         <View style={styles.container}>
-        
-        <Text style={styles.pageTitle}>
-            Github Repository Consulter
-        </Text>
-        <TextInput 
-        onChangeText={username => setUserName(username)}
-        style={styles.textInput} 
-        placeholder="Insira o username do Github">
-        </TextInput>
 
+        <View style={styles.inputBox}>
+            <Text style={styles.helperText}>
+                Insira o nome de usuário do GitHub
+            </Text>
+            <TextInput 
+            onChangeText={username => setUserName(username)}
+            style={styles.textInput} 
+            placeholder="Insira o username do Github">
+            </TextInput>
+            <TouchableOpacity style={styles.button} onPress={onPress}>
+                <Text style={{color: "white", fontWeight: "bold"}}>
+                    Buscar
+                </Text>
+            </TouchableOpacity>
+            {
+                errorMessage && <Text style={styles.errorMessage}>
+                                    {errorMessage}
+                                </Text>
+
+            }
+        </View>
+
+{/* 
         <Button
             onPress={() => navigation.navigate("ShowRepositories", {username: username})}
-            // onPress={() => searchRepositories()}
             title="Pesquisar"
             accessibilityLabel="Learn more about this purple button"  
-        />
+        /> */}
         </View>
     )
 
 }
 
 const styles = StyleSheet.create({
-    pageTitle: {
+    container: {
+        height: "100%",
+        display: "flex",
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    title: {
+        fontFamily: "KonkhmerSleokchher",
         fontSize: 30,
-        width: '50%',
-        textAlign: 'center'
+        color: "black",
+        lineHeight: 40,
+        textAlign: "center"
+    },
+    inputBox: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around",
+        height: "20%"
     },
     textInput: {
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        width: '60%',
-        marginTop: '60%',
+        elevation: 5,
+        shadowColor: '#000000', 
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 7,
+        backgroundColor: "white",
+        borderRadius: 8,
+        borderWidth: 0,
+        padding: "2%",
         textAlign: 'center'
     }, 
-    container: {
-        flex: 1,
-        backgroundColor: 'tomato',
-        alignItems: 'center',
-        // marginTop: '15%',
-        justifyContent: 'flex-start',
-      }
+    helperText: {
+        fontSize: 18
+    },
+    button: {
+        padding: 10,
+        borderRadius: 6,
+        fontWeight: "bold",
+        backgroundColor: "tomato"
+    },
+    errorMessage: {
+        fontStyle: "italic"
+    }
+    
 })
 
 export default Repositories;

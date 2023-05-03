@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 
-const Home = () => {
+const Home = ({navigation}) => {
 
     
 
@@ -11,7 +11,7 @@ const Home = () => {
             <Text style={styles.title}>Meus Repositórios do GitHub</Text>
             {/* <Text style={styles.subtitle}>Acesse seus repositórios do GitHub</Text> */}
 
-            <TouchableOpacity style={styles.button} >
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Buscar")} >
                 <Text style={{fontWeight: "500"}}>Vamos começar</Text>
             </TouchableOpacity>
 

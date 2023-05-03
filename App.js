@@ -24,7 +24,7 @@ export default function App() {
         <Stack.Screen component={Home} name="Home" options={{
           headerShown: false
         }} />
-        <Stack.Screen component={Repositories} name="Buscar" />
+        <Stack.Screen component={Repositories} name="Buscar" options={{}}/>
         <Stack.Screen component={ShowRepositories} name='Meus Repositórios' />
       </Stack.Navigator>
     </NavigationContainer>

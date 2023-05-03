@@ -2,20 +2,28 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { Text, TextInput, StyleSheet, Button, View, ScrollView } from "react-native";
 
-const ShowRepositories = ({navigation, route}) => {
+const ShowRepositories = ({ navigation, route }) => {
 
     useEffect(() => {
         searchRepositories();
     }, [])
 
-    interface IRepoInfo {
+    interface RepoInfo {
         id: Number,
-        name: String,
-        created_at: String,
-        updated_at: String 
+        name: string,
+        created_at: string,
+        updated_at: string
+    }
+
+    interface Repository {
+        id: Number,
+        name: string,
+        date_of_creation: string,
+        last_update: string
     }
 
     const [repositories, setRepositories] = useState([]);
+
     const searchRepositories = async () => {
 
         const request_url = `https://api.github.com/users/${route.params.username}/repos`;
@@ -24,87 +32,87 @@ const ShowRepositories = ({navigation, route}) => {
             const data = Array.from(response.data);
             const arr = [];
 
-            data.forEach((repo: IRepoInfo) => {
-                arr.push({
-                    "id": repo.id,
-                    "name": repo.name, 
-                    "date_of_creation": repo.created_at,
-                    "last_update": repo.updated_at
-            });
+            data.forEach((repo: RepoInfo) => {
+
+                const info: Repository = {
+                    id: repo.id,
+                    name: repo.name,
+                    date_of_creation: repo.created_at,
+                    last_update: repo.updated_at
+                }
+
+                arr.push(info);
             })
 
             setRepositories(oldArray => [...oldArray, ...arr])
 
-            console.log(arr)
 
         })
-        .catch(error => console.log(error));
-        
-        
+            .catch(error => console.log(error));
+
+
 
     }
 
     return (
 
-        <View style={styles.container}>
-        <ScrollView>
-
-        
-        <Text style={styles.pageTitle}>
-            Repositórios de {route.params.username}
-        </Text>
+        <ScrollView contentContainerStyle={styles.container}>
 
 
-        {
-            repositories.map((repo) => {
-                return (
-                    <View style={styles.repository} key={repo.id}>
-                        <Text>Nome: {repo.name}</Text>
-                        <Text>Criação: {repo.date_of_creation}</Text>
-                        <Text>Último update: {repo.last_update}</Text>
-                    </View>
+            <Text style={styles.title}>
+                Repositórios de {route.params.username}
+            </Text>
+
+
+            {
+                repositories.map((repo: Repository) => {
+                    return (
+                        <View style={styles.repository} key={`${repo.id}${repo.date_of_creation}`}>
+                            <Text style={styles.repositoryText}>Nome: {repo.name}</Text>
+                            <Text style={styles.repositoryText}>Criação: {repo.date_of_creation}</Text>
+                            <Text style={styles.repositoryText}>Último update: {repo.last_update}</Text>
+                        </View>
                     )
                 })
             }
 
-        {/* <Button
-            onPress={() => navigation.navigate("ShowRepositories")}
-            // onPress={() => searchRepositories()}
-            title="Pesquisar"
-            accessibilityLabel="Learn more about this purple button"  
-        /> */}
         </ScrollView>
-        </View>
-        )
-        
-    }
+    )
+
+}
 
 const styles = StyleSheet.create({
-    pageTitle: {
-            fontSize: 30,
-            width: '50%',
-            textAlign: 'center'
-        },
-        textInput: {
-                height: 40,
-                borderColor: 'gray',
-                borderWidth: 1,
-                width: '60%',
-        marginTop: '60%',
-        textAlign: 'center'
-    }, 
-    repository: {
-        marginTop: '10%'
-    },
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        // backgroundColor: "red",
+        display: "flex",
         // backgroundColor: 'blue',
         alignItems: 'center',
-        // marginTop: '15%',
         justifyContent: 'flex-start',
-      }
+    },
+    title: {
+        fontFamily: "KonkhmerSleokchher",
+        fontSize: 30,
+        width: '50%',
+        lineHeight: 39,
+        textAlign: 'center',
+        marginTop: "10%"
+    },
+    textInput: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        width: '60%',
+        marginTop: '60%',
+        textAlign: 'center'
+    },
+    repository: {
+        marginTop: '10%',
+        backgroundColor: "tomato",
+        borderRadius: 8,
+        padding: 10
+    },
+    repositoryText: {
+        color: "white"
+    }
 })
 
 export default ShowRepositories;
